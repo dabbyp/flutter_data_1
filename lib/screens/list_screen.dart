@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_data_1/models/todo.dart';
+import 'package:flutter_data_1/providers/todo_default.dart';
 
 class ListScreen extends StatefulWidget {
   @override
@@ -7,16 +9,21 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-  List<Todo> todos = [];
+  late List<Todo> todos;
+  TodoDefault todoDefault = TodoDefault();
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    print("initState");
-    setState(() {
-      isLoading = false;
+    print("[start] initState");
+    Timer(Duration(seconds: 2), () {
+      todos = todoDefault.getTodos();
+      setState(() {
+        isLoading = false;
+      });
     });
+    print("[end] initState");
   }
 
   @override
@@ -42,7 +49,50 @@ class _ListScreenState extends State<ListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Text('+', style: TextStyle(fontSize: 25)),
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                String title = '';
+                String description = '';
+                return AlertDialog(
+                  title: Text('할 일 추가하기'),
+                  content: Container(
+                    height: 200,
+                    child: Column(
+                      children: [
+                        TextField(
+                          onChanged: (value) {
+                            title = value;
+                          },
+                          decoration: InputDecoration(labelText: '제목'),
+                        ),
+                        TextField(
+                          onChanged: (value) {
+                            description = value;
+                          },
+                          decoration: InputDecoration(labelText: '설명'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text('추가'),
+                      onPressed: () {
+                        setState(() {
+                          print("[UI] ADD");
+                          todoDefault.addTodo(
+                            Todo(title: title, description: description),
+                          );
+                        });
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              });
+        },
       ),
       body: isLoading
           ? Center(
