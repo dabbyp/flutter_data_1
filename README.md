@@ -2,7 +2,6 @@
 
 - DB 데이터 연결
 
-- dependency
 # pubspec.yaml
 ```DART
 dependencies:
@@ -79,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     MaterialPageRoute(builder: (context) => ListScreen()));
               });
             },
-```DART
+```
 
 - 경량화 DB, sqlite
 ```DART
