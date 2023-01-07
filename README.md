@@ -71,13 +71,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
 - 람다식, _
 ```DART
-            onPressed: () {
-              // 파라미터변수가 있긴한데 사용하지 않을 예정이면 '_' 로 기재할 수 있음
-              setLogin().then((_) {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => ListScreen()));
-              });
-            },
+    onPressed: () {
+        // 파라미터변수가 있긴한데 사용하지 않을 예정이면 '_' 로 기재할 수 있음
+        setLogin().then((_) {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => ListScreen()));
+        });
+    },
 ```
 
 - 경량화 DB, sqlite
