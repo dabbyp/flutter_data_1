@@ -42,12 +42,136 @@ class MyApp extends StatelessWidget {
 
 - 화면<br>
   lib/screens/list_screen.dart<br>
+```DART
+/** 1.ListView.separated
+* ListView.builder와 유사하지만 List의 각 요소들 사이에 구분자(Divider)를 넣어주는 기능을 제공
+* 동일 리스트 아이템을 반복적으로 보여줄때 사용
+**/
+  body: isLoading
+      ? Center(
+          child: CircularProgressIndicator(),
+        )
+      : ListView.separated(
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(todos[index].title),
+
+/** 2.Timer를 활용한 데이터 초기화
+**/
+class _ListScreenState extends State<ListScreen> {
+  late List<Todo> todos;
+  TodoDefault todoDefault = TodoDefault();
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    print("[start] initState");
+    Timer(Duration(seconds: 2), () {
+      todos = todoDefault.getTodos();
+      setState(() {
+        isLoading = false;
+      });
+    });
+    print("[end] initState");
+  }
+
+/** 3.AlertDialog
+* alert 팝업창에 버튼추가가 필요한 경우 사용
+**/
+  floatingActionButton: FloatingActionButton(
+    child: Text('+', style: TextStyle(fontSize: 25)),
+    onPressed: () {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            String title = '';
+            String description = '';
+            return AlertDialog(
+              title: Text('할 일 추가하기'),
+              content: Container(
+                height: 200,
+                child: Column(
+                  children: [
+                    TextField(
+                      onChanged: (value) {
+                        title = value;
+                      },
+                      decoration: InputDecoration(labelText: '제목'),
+                    ),
+                    TextField(
+                      onChanged: (value) {
+                        description = value;
+                      },
+                      decoration: InputDecoration(labelText: '설명'),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  child: Text('추가'),
+                  onPressed: () {
+                    setState(() {
+                      print("[UI] ADD");
+                      todoDefault.addTodo(
+                        Todo(title: title, description: description),
+                      );
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text('취소'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    },
+  ),
+
+/** 4.SimpleDialog
+* alert 팝업창에 버튼추가가 필요없는 경우 사용
+**/
+return SimpleDialog(
+  title: Text('할 일'),
+  children: [
+    Container(
+      padding: EdgeInsets.all(10),
+      child: Text('제목 : ' + todos[index].title),
+    ),
+    Container(
+      padding: EdgeInsets.all(10),
+      child: Text('설명 : ' + todos[index].description),
+    ),
+  ],
+);
+
+/** 5.hintText
+* TextField의 속성으로 기본값을 지정할때 사용
+**/
+  TextField(
+    onChanged: (value) {
+      title = value;
+    },
+    decoration: InputDecoration(
+      hintText: todos[index].title,
+    ),
+  ),
+```
   lib/screens/login_screen.dart<br>
   lib/screens/news_screen.dart<br>
   lib/screens/splash_screen.dart<br>
   lib/providers/todo_default.dart<br>
   lib/models/todo.dart<br>
   
+
+
+
 - 환경설정 목적의 단순한 key-value db : SharedPreferences
 ```DART
 // SharedPreferences
