@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_data_1/screens/list_screen_from_sqlite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
@@ -30,9 +31,11 @@ class _SplashScreenState extends State<SplashScreen> {
     await checkLogin().then((isLogin) {
       if (isLogin) {
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => ListScreen()));
+            //MaterialPageRoute(builder: (context) => ListScreen()));
+            MaterialPageRoute(builder: (context) => ListScreenFromSqlite()));
       } else {
         Navigator.of(context).pushReplacement(
+            //MaterialPageRoute(builder: (context) => LoginScreen()));
             MaterialPageRoute(builder: (context) => LoginScreen()));
       }
     });

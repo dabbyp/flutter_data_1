@@ -162,6 +162,27 @@ return SimpleDialog(
       hintText: todos[index].title,
     ),
   ),
+
+/** 6.DB insert & view
+* DB에 입력하고 DB 입력된 리스트를 출력
+**/
+  // DB insert & view
+  TextButton(
+    child: Text('추가'),
+    onPressed: () async {
+      await todoSqlite.addTodo(
+        Todo(title: title, description: description),
+      );
+      List<Todo> newTodos = await todoSqlite.getTodos();
+      setState(() {
+        print("[UI] ADD]");
+        todos = newTodos;
+      });
+
+      Navigator.of(context).pop();
+    },
+  ),
+
 ```
   lib/screens/login_screen.dart<br>
   lib/screens/news_screen.dart<br>
@@ -169,9 +190,6 @@ return SimpleDialog(
   lib/providers/todo_default.dart<br>
   lib/models/todo.dart<br>
   
-
-
-
 - 환경설정 목적의 단순한 key-value db : SharedPreferences
 ```DART
 // SharedPreferences
@@ -206,7 +224,52 @@ class _SplashScreenState extends State<SplashScreen> {
 
 - 경량화 DB, sqlite
 ```DART
-// TODO
+import 'package:flutter_data_1/models/todo.dart';
+import 'package:sqflite/sqflite.dart';
+
+class TodoSqlite {
+  late Database db;
+
+  Future initDb() async {
+    db = await openDatabase('my_db.db');
+    await db.execute(
+      'CREATE TABLE IF NOT EXISTS MyTodo (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title TEXT, description TEXT)',
+    );
+  }
+
+  Future<List<Todo>> getTodos() async {
+    List<Todo> todos = [];
+    List<Map> maps =
+        await db.query('MyTodo', columns: ['id', 'title', 'description']);
+    maps.forEach((map) {
+      todos.add(Todo.fromMap(map));
+    });
+    return todos;
+  }
+
+  Future<Todo?> getTodo(int id) async {
+    List<Map> map = await db.query('MyTodo',
+        columns: ['id', 'title', 'description'],
+        where: 'id = ?',
+        whereArgs: [id]);
+    if (map.length > 0) {
+      return Todo.fromMap(map[0]);
+    }
+  }
+
+  Future addTodo(Todo todo) async {
+    int id = await db.insert('MyTodo', todo.toMap());
+  }
+
+  Future deleteTodo(int id) async {
+    await db.delete('MyTodo', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future updateTodo(Todo todo) async {
+    await db
+        .update('MyTodo', todo.toMap(), where: 'id = ?', whereArgs: [todo.id]);
+  }
+}
 ```
 
 ## 실행화면
