@@ -32,6 +32,8 @@ migrate_working_dir/
 .pub/
 /build/*
 !/build/web/
+!/build/cloud_firestore/
+!/build/firebase_core/
 
 # firebase key file
 GoogleService-info.plist
