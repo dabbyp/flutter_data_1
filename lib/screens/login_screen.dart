@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_data_1/screens/list_screen.dart';
-import 'package:flutter_data_1/screens/list_screen_from_sqlite.dart';
+import 'package:flutter_data_1/screens/list_screen_from_firebase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -30,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Navigator.of(context).pushReplacement(
                     //MaterialPageRoute(builder: (context) => ListScreen()));
                     MaterialPageRoute(
-                        builder: (context) => ListScreenFromSqlite()));
+                        builder: (context) => ListScreenFromFirebase()));
               });
             },
             child: Text('로그인'),

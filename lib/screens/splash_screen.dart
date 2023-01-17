@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'package:flutter_data_1/screens/list_screen_from_sqlite.dart';
+import 'package:flutter_data_1/screens/list_screen_from_firebase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_data_1/screens/list_screen.dart';
 import 'package:flutter_data_1/screens/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isLogin) {
         Navigator.of(context).pushReplacement(
             //MaterialPageRoute(builder: (context) => ListScreen()));
-            MaterialPageRoute(builder: (context) => ListScreenFromSqlite()));
+            MaterialPageRoute(builder: (context) => ListScreenFromFirebase()));
       } else {
         Navigator.of(context).pushReplacement(
             //MaterialPageRoute(builder: (context) => LoginScreen()));

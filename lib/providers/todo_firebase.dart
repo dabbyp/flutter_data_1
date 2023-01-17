@@ -3,12 +3,12 @@ import 'package:flutter_data_1/models/todo.dart';
 import 'package:flutter/material.dart';
 
 class TodoFirebase {
-  late CollectionReference todoReference;
+  late CollectionReference todosReference;
   late Stream<QuerySnapshot> todoStream;
 
   Future initDb() async {
-    todoReference = FirebaseFirestore.instance.collection('todos');
-    todoStream = todoReference.snapshots();
+    todosReference = FirebaseFirestore.instance.collection('todos');
+    todoStream = todosReference.snapshots();
   }
 
   List<Todo> getTodos(AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -16,5 +16,16 @@ class TodoFirebase {
       return Todo.fromSnapshot(document);
     }).toList();
   }
-  //TODO
+
+  Future addTodo(Todo todo) async {
+    todosReference.add(todo.toMap());
+  }
+
+  Future updateTodo(Todo todo) async {
+    todo.reference?.update(todo.toMap());
+  }
+
+  Future deleteTodo(Todo todo) async {
+    todo.reference?.delete();
+  }
 }
